@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
-int main(){
+int main()
+{
     cout << "Hello Nimra" << endl;
     cout << "hooria test" << endl;
     cout << 1;
