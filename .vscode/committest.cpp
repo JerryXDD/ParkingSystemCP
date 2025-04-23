@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
 int main(){
-    cout << endl;
+    cout << "Hello Nimra" << endl;
+    system("pause");
 }
