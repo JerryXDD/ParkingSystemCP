@@ -26,7 +26,6 @@ int main()
 		{
 		case 1:
 		{
-			cout << "Congratulatons you choose 1\n";
 			break;
 		}
 		case 2:
