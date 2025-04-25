@@ -14,6 +14,7 @@ void printmenu()
 
 int main()
 {
+	printmenu();
     int choice;
 	do {
 		cout << "Enter choice:(1-6):";
@@ -50,11 +51,11 @@ int main()
 		}
 		default:
 		{
-                  break;
+          break;
 
-				}
+		}
 		}
 	} while (choice != 6);
     system("pause");
-    
+    return 0;
 }
