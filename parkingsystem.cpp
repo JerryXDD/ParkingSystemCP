@@ -103,94 +103,86 @@ int main() {
         break;
     
         case 2:
-            cout << "Enter vehicle type you want to remove (car/bike/truck/van): ";
-            cin >> vehicletype;
-            found = false;
-
-            if (vehicletype == "car" || vehicletype == "Car") {
-                cout << "Enter the car plate number you want to remove: ";
-                cin >> platenumber;
-
-                for (int i = 0; i < Carslotcounter; i++) {
-                    if (Car[i] == platenumber) {
-                        for (int j = i; j < Carslotcounter - 1; j++) {
-                            Car[j] = Car[j + 1];
-                        }
-                        Carslotcounter--;
-                        found = true;
-                        break;
-                    }
+        cout << "Enter vehicle type you want to remove (car/bike/truck/van): ";
+        cin >> vehicletype;
+    
+        if (vehicletype == "car" || vehicletype == "Car") {
+            cout << "Enter the car plate number you want to remove: ";
+            cin >> platenumber;
+    
+            bool found = false;
+            for (int i = 0; i < Carslots; i++) {
+                if (Car[i] == platenumber) {
+                    Car[i] = ""; 
+                    cout << "Your Car with plate number " << platenumber << " is successfully removed" << endl;
+                    found = true;
+                    break;
                 }
-
-                if (found) {
-                    cout << "Your car with plate number " << platenumber << " is successfully removed." << endl;
-                } else {
-                    cout << "Vehicle with plate " << platenumber << " not found!" << endl;
-                }
-            } else if (vehicletype == "bike" || vehicletype == "Bike") {
-                cout << "Enter the bike plate number you want to remove: ";
-                cin >> platenumber;
-
-                for (int i = 0; i < Bikeslotcounter; i++) {
-                    if (Bike[i] == platenumber) {
-                        for (int j = i; j < Bikeslotcounter - 1; j++) {
-                            Bike[j] = Bike[j + 1];
-                        }
-                        Bikeslotcounter--;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    cout << "Your bike with plate number " << platenumber << " is successfully removed." << endl;
-                } else {
-                    cout << "Vehicle with plate " << platenumber << " not found!" << endl;
-                }
-            } else if (vehicletype == "truck" || vehicletype == "Truck") {
-                cout << "Enter the truck plate number you want to remove: ";
-                cin >> platenumber;
-
-                for (int i = 0; i < Truckslotcounter; i++) {
-                    if (Truck[i] == platenumber) {
-                        for (int j = i; j < Truckslotcounter - 1; j++) {
-                            Truck[j] = Truck[j + 1];
-                        }
-                        Truckslotcounter--;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    cout << "Your truck with plate number " << platenumber << " is successfully removed." << endl;
-                } else {
-                    cout << "Vehicle with plate " << platenumber << " not found!" << endl;
-                }
-            } else if (vehicletype == "van" || vehicletype == "Van") {
-                cout << "Enter the van plate number you want to remove: ";
-                cin >> platenumber;
-
-                for (int i = 0; i < Vanslotcounter; i++) {
-                    if (Van[i] == platenumber) {
-                        for (int j = i; j < Vanslotcounter - 1; j++) {
-                            Van[j] = Van[j + 1];
-                        }
-                        Vanslotcounter--;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    cout << "Your van with plate number " << platenumber << " is successfully removed." << endl;
-                } else {
-                    cout << "Vehicle with plate " << platenumber << " not found!" << endl;
-                }
-            } else {
-                cout << "Invalid input! Please enter the correct vehicle type." << endl;
             }
-            break;
+    
+            if (!found) {
+                cout << "Vehicle with plate " << platenumber << " not found!" << endl;
+            }
+        }
+        else if (vehicletype == "bike" || vehicletype == "Bike") {
+            cout << "Enter the bike plate number you want to remove: ";
+            cin >> platenumber;
+    
+            bool found = false;
+            for (int i = 0; i < Bikeslots; i++) {
+                if (Bike[i] == platenumber) {
+                    Bike[i] = "";
+                    cout << "Your Bike with plate number " << platenumber << " is successfully removed" << endl;
+                    found = true;
+                    break;
+                }
+            }
+    
+            if (!found) {
+                cout << "Vehicle with plate " << platenumber << " not found!" << endl;
+            }
+        }
+        else if (vehicletype == "truck" || vehicletype == "Truck") {
+            cout << "Enter the truck plate number you want to remove: ";
+            cin >> platenumber;
+    
+            bool found = false;
+            for (int i = 0; i < Truckslots; i++) {
+                if (Truck[i] == platenumber) {
+                    Truck[i] = "";
+                    cout << "Your Truck with plate number " << platenumber << " is successfully removed" << endl;
+                    found = true;
+                    break;
+                }
+            }
+    
+            if (!found) {
+                cout << "Vehicle with plate " << platenumber << " not found!" << endl;
+            }
+        }
+        else if (vehicletype == "van" || vehicletype == "Van") {
+            cout << "Enter the van plate number you want to remove: ";
+            cin >> platenumber;
+    
+            bool found = false;
+            for (int i = 0; i < Vanslots; i++) {
+                if (Van[i] == platenumber) {
+                    Van[i] = "";
+                    cout << "Your Van with plate number " << platenumber << " is successfully removed" << endl;
+                    found = true;
+                    break;
+                }
+            }
+    
+            if (!found) {
+                cout << "Vehicle with plate " << platenumber << " not found!" << endl;
+            }
+        }
+        else {
+            cout << "Invalid input! Please enter the correct vehicle type." << endl;
+        }
+        break;
+    
         case 3:
             break;
         
