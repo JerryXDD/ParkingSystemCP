@@ -10,7 +10,7 @@ cout << "---Smart Parking Lot System---" << endl;
 cout << "1.Park Vehicle" << endl;
 cout << "2.Remove Vehicle" << endl;
 cout << "3.View Available Slots" << endl;
-cout << "4.View Parked Vehicles" << endl;
+cout << "4.View Parking Log" << endl;
 cout << "5.Search Vehicle" << endl;
 cout << "6.Exit" << endl;
 }
@@ -25,7 +25,7 @@ int main() {
         cin >> choice;
 
         if (choice < 1 || choice > 6) {
-            cout << "Invalid option! Please enter a choice between 1 and 2.\n";
+            cout << "Invalid option! Please enter a choice between 1 and 6.\n";
             break;
         }
         switch (choice) {
