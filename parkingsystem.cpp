@@ -3,7 +3,7 @@ using namespace std;
 
 const int Carslots = 40, Bikeslots = 30, Vanslots = 20, Truckslots = 10;
 string Car[Carslots], Bike[Bikeslots], Truck[Truckslots], Van[Vanslots];
-
+int carCounter = 0, bikeCounter = 0, truckCounter = 0, vanCounter = 0;
 void printmenu()
 {
 cout << "---Smart Parking Lot System---" << endl;
@@ -184,8 +184,26 @@ int main() {
         break;
     
         case 3:
+            for (int i = 0; i < Carslots; i++)
+            {
+                if (Car[i] == "") carCounter++;
+            }
+            for (int i = 0; i < Bikeslots; i++) {
+                if (Bike[i] == "") bikeCounter++;
+            }
+            for (int i = 0; i < Truckslots; i++) {
+                if (Truck[i] == "") truckCounter++;
+            }
+            for (int i = 0; i < Vanslots; i++) {
+                if (Van[i] == "") vanCounter++;
+            }
+
+            cout << "\n--- Remaining Parking Slots ---" << endl;
+            cout << "Car Slots Available: " << carCounter << " out of " << Carslots << endl;
+            cout << "Bike Slots Available: " << bikeCounter << " out of " << Bikeslots << endl;
+            cout << "Truck Slots Available: " << truckCounter << " out of " << Truckslots << endl;
+            cout << "Van Slots Available: " << vanCounter << " out of " << Vanslots << endl;
             break;
-        
         case 4:
             break;
 
