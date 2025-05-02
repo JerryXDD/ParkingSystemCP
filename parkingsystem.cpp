@@ -186,19 +186,27 @@ int main() {
         case 3:
             for (int i = 0; i < Carslots; i++)
             {
-                if (Car[i] == "") carCounter++;
+                if (Car[i] == ""){ 
+                    carCounter++;
+                }
             }
             for (int i = 0; i < Bikeslots; i++) {
-                if (Bike[i] == "") bikeCounter++;
+                if (Bike[i] == ""){
+                    bikeCounter++;
+                }
             }
             for (int i = 0; i < Truckslots; i++) {
-                if (Truck[i] == "") truckCounter++;
+                if (Truck[i] == ""){ 
+                    truckCounter++;
+                }
             }
             for (int i = 0; i < Vanslots; i++) {
-                if (Van[i] == "") vanCounter++;
+                if (Van[i] == ""){ 
+                    vanCounter++;
+                }
             }
-
-            cout << "\n--- Remaining Parking Slots ---" << endl;
+            cout << endl;
+            cout << "--- Remaining Parking Slots ---" << endl;
             cout << "Car Slots Available: " << carCounter << " out of " << Carslots << endl;
             cout << "Bike Slots Available: " << bikeCounter << " out of " << Bikeslots << endl;
             cout << "Truck Slots Available: " << truckCounter << " out of " << Truckslots << endl;
