@@ -3,14 +3,14 @@ using namespace std;
 
 const int Carslots = 40, Bikeslots = 30, Vanslots = 20, Truckslots = 10;
 string Car[Carslots], Bike[Bikeslots], Truck[Truckslots], Van[Vanslots];
-
+int carCounter = 0, bikeCounter = 0, truckCounter = 0, vanCounter = 0;
 void printmenu()
 {
 cout << "---Smart Parking Lot System---" << endl;
 cout << "1.Park Vehicle" << endl;
 cout << "2.Remove Vehicle" << endl;
 cout << "3.View Available Slots" << endl;
-cout << "4.View Parked Vehicles" << endl;
+cout << "4.View Parking Log" << endl;
 cout << "5.Search Vehicle" << endl;
 cout << "6.Exit" << endl;
 }
@@ -25,7 +25,7 @@ int main() {
         cin >> choice;
 
         if (choice < 1 || choice > 6) {
-            cout << "Invalid option! Please enter a choice between 1 and 2.\n";
+            cout << "Invalid option! Please enter a choice between 1 and 6.\n";
             break;
         }
         switch (choice) {
@@ -184,8 +184,34 @@ int main() {
         break;
     
         case 3:
+            for (int i = 0; i < Carslots; i++)
+            {
+                if (Car[i] == ""){ 
+                    carCounter++;
+                }
+            }
+            for (int i = 0; i < Bikeslots; i++) {
+                if (Bike[i] == ""){
+                    bikeCounter++;
+                }
+            }
+            for (int i = 0; i < Truckslots; i++) {
+                if (Truck[i] == ""){ 
+                    truckCounter++;
+                }
+            }
+            for (int i = 0; i < Vanslots; i++) {
+                if (Van[i] == ""){ 
+                    vanCounter++;
+                }
+            }
+            cout << endl;
+            cout << "--- Remaining Parking Slots ---" << endl;
+            cout << "Car Slots Available: " << carCounter << " out of " << Carslots << endl;
+            cout << "Bike Slots Available: " << bikeCounter << " out of " << Bikeslots << endl;
+            cout << "Truck Slots Available: " << truckCounter << " out of " << Truckslots << endl;
+            cout << "Van Slots Available: " << vanCounter << " out of " << Vanslots << endl;
             break;
-        
         case 4:
             break;
 
