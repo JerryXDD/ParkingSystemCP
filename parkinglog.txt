@@ -1,0 +1,7 @@
+PARKED | Vehicle Type: Car | Plate: KJM-963 | Slot: 1 | Time: 10:04
+PARKED | Vehicle Type: Car | Plate: HGD-741 | Slot: 2 | Time: 10:07
+PARKED | Vehicle Type: Bike | Plate: HM-36 | Slot: 1 | Time: 10:09
+PARKED | Vehicle Type: Truck | Plate: BVDC-8745 | Slot: 1 | Time: 10:13
+EXIT | Vehicle Type: Car | Plate: KJM-963 | Slot: 1 | Exit Time: 10:16
+EXIT | Vehicle Type: Bike | Plate: HM-36 | Slot: 1 | Exit Time: 10:20
+EXIT | Vehicle Type: Truck | Plate: BVDC-8745 | Slot: 1 | Exit Time: 10:23

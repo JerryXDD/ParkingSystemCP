@@ -30,7 +30,7 @@ struct Car{
     int slots = 40;
     string plates[40];
     steady_clock::time_point carEntry[40];
-    float carFee = 3.00;
+    const float carFee = 3.00;
     float carTotal = 0;
 };
 
@@ -38,7 +38,7 @@ struct Bike{
     int slots = 30;
     string plates[30];
     steady_clock::time_point bikeEntry[30];
-    float bikeFee = 1.50;
+    const float bikeFee = 1.50;
     float bikeTotal = 0;
 };
 
@@ -191,8 +191,8 @@ void removeCar(Car &carData){
             carData.plates[i] = ""; 
             carData.carEntry[i] = steady_clock::time_point();
             cout << "Your Car with plate number " << plate << " removed from Slot " << i + 1 << "at " << carExit << endl;
-            cout << "Fee is: $" << carData.carFee;
-            carData.carTotal += carData.carTotal;
+            cout << "Fee is: $" << carData.carFee << endl;
+            carData.carTotal += carData.carFee;
             parkingfile << "EXIT | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Exit Time: " << carExit << endl;
             break;
         }
@@ -219,7 +219,7 @@ void removeBike(Bike &bikeData){
             bikeData.plates[i] = ""; 
             bikeData.bikeEntry[i] = steady_clock::time_point();
             cout << "Your Bike with plate number " << plate << " removed from Slot " << i + 1 << "at " << bikeExit << endl;
-            cout << "Fee is : $" << bikeData.bikeFee;
+            cout << "Fee is : $" << bikeData.bikeFee << endl;
             bikeData.bikeTotal += bikeData.bikeFee;
             parkingfile << "EXIT | Vehicle Type: Bike | Plate: " << plate << " | Slot: " << i + 1 << " | Exit Time: " << bikeExit << endl;
             break;
@@ -247,7 +247,7 @@ void removeVan(Van &vanData){
             vanData.plates[i] = ""; 
             vanData.vanEntry[i] = steady_clock::time_point();
             cout << "Your Van with plate number " << plate << " removed from Slot " << i + 1 << "at " << vanExit << endl;
-            cout << "Fee is: $" << vanData.vanFee;
+            cout << "Fee is: $" << vanData.vanFee << endl;
             vanData.vanTotal += vanData.vanFee;
             parkingfile << "EXIT | Vehicle Type: Van | Plate: " << plate << " | Slot: " << i + 1 << " | Exit Time: " << vanExit << endl;
             
@@ -276,7 +276,7 @@ void removeTruck(Truck &truckData){
             truckData.plates[i] = ""; 
             truckData.truckEntry[i] = steady_clock::time_point();
             cout << "Your Truck with plate number " << plate << " removed from Slot " << i + 1 << "at " << truckExit << endl;
-            cout << "Fee is: $" << truckData.truckFee;
+            cout << "Fee is: $" << truckData.truckFee << endl;
             truckData.truckTotal += truckData.truckFee;
             parkingfile << "EXIT | Vehicle Type: Truck | Plate: " << plate << " | Slot: " << i + 1 << " | Exit Time: " << truckExit << endl;
             break;
@@ -321,51 +321,39 @@ void viewParkingLog(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData
     const string username = "admin12?";
     const string password = "parkingview34?";
     const int maxtries = 3;
-    int usercounter = 0, pwcounter = 0;
+    int usercounter = 0;
     string userinput, passwordinput;
-    do{
-    cout << "Enter Username :";
-    cin.ignore();
-    getline(cin, userinput);
-    if (username == userinput){
+    string linex;
+    while ( usercounter <= maxtries){
+        cout << "Enter Username: ";
+        getline(cin, userinput);
         cout << "Enter Password: ";
-        cin.ignore();
         getline(cin, passwordinput);
-        if (password == passwordinput){
+        if (username == userinput && password == passwordinput){
             ifstream parkingfile("parkinglog.txt");
-            string linex;
-            if(parkingfile.is_open()){
-                while (getline(parkingfile, linex)){
-                cout << linex;
+            if (parkingfile.is_open()){
+                while(getline(parkingfile, linex)){
+                    cout << linex << endl;
+                }
+                parkingfile.close();
                 cout << endl;
-            }
-            parkingfile.close();
-            cout << endl;
-            cout << "-----Revenue-----" << endl;
-            cout << "Car Revenue: $" << carData.carTotal << endl;
-            cout << "Bike Revenue: $" << bikeData.bikeTotal << endl;
-            cout << "Van Revenue: $" << vanData.vanTotal << endl;
-            cout << "Truck Revenue: $" << truckData.truckTotal << endl;
-            cout << "Total Revenue: $" << carData.carTotal + bikeData.bikeTotal + vanData.vanTotal + truckData.truckTotal << endl;
-            return;
+                cout << "-----Revenue-----" << endl;
+                cout << "Car Revenue: $" << carData.carTotal << endl;
+                cout << "Bike Revenue: $" << bikeData.bikeTotal << endl;
+                cout << "Van Revenue: $" << vanData.vanTotal << endl;
+                cout << "Truck Revenue: $" << truckData.truckTotal << endl;
+                cout << "Total Revenue: $" << carData.carTotal + bikeData.bikeTotal + vanData.vanTotal + truckData.truckTotal << endl;
             } else{
-                cout << "Unable to Open Parking Log" << endl;
+                cout << "Unable to Open File" << endl;
             }
+            return;
         } else{
-            cout << "Wrong Password. Try Again";
-            pwcounter++;
-            break;
-        }
-        } else{
-            cout << "Wrong Username. Try Again";
+            cout << "Wrong Username or Password. Try Again" << endl;
             usercounter++;
-            break;
         }
-    if (usercounter > maxtries || pwcounter > maxtries){
-        cout << "Too Many Attempts. Try Later" << endl;
-        return;
     }
-    } while (usercounter <= maxtries || pwcounter <= maxtries);
+    cout << "Too Many Attempts. Try Later" << endl;
+    return;
 }
 
 void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData){
