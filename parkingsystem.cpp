@@ -2,6 +2,7 @@
 #include <string>
 #include <chrono>
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
 using namespace std::chrono;
 
@@ -412,7 +413,7 @@ int main(){
     int choice;
     bool found = false;
     string vehicletype;
-    
+    system("Color 0A");
     do {
         printmenu();
         cout << "Enter choice: ";
