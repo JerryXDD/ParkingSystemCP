@@ -324,11 +324,14 @@ void viewParkingLog(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData
     int usercounter = 0;
     string userinput, passwordinput;
     string linex;
-    while ( usercounter <= maxtries){
+    while ( usercounter < maxtries){
         cout << "Enter Username: ";
+        cin.ignore();
         getline(cin, userinput);
+        
         cout << "Enter Password: ";
-        getline(cin, passwordinput);
+        getline(cin,passwordinput);
+        
         if (username == userinput && password == passwordinput){
             ifstream parkingfile("parkinglog.txt");
             if (parkingfile.is_open()){
