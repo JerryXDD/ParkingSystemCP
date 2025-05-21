@@ -85,8 +85,9 @@ void parkCar(Car &carData) {
                 carData.plates[i] = plate;
                 carData.carEntry[i] = steady_clock::now();
                 carTime = printParkingTime(carData.carEntry[i], baseTime);
-                cout << "Car Plate: " << plate << " parked at Slot " << i + 1 << " at time: " << printParkingTime(carData.carEntry[i], baseTime) << endl;
-                parkingfile << "PARKED | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << carTime << endl;
+                cout << "PARKED | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << printParkingTime(carData.carEntry[i], baseTime) << endl;
+                parkingfile << "Car" << plate << " " << carTime << endl;
+                cout << endl;
                 parked = true;
                 break;
             }
@@ -112,8 +113,9 @@ void parkBike(Bike &bikeData) {
             bikeData.plates[i] = plate;
             bikeData.bikeEntry[i] = steady_clock::now();
             bikeTime = printParkingTime(bikeData.bikeEntry[i], baseTime);
-            cout << "Bike Plate: " << plate << " parked at Slot " << i + 1 << " at time: " << printParkingTime(bikeData.bikeEntry[i], baseTime) << endl;
-            parkingfile << "PARKED | Vehicle Type: Bike | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << bikeTime << endl;
+            cout << "PARKED | Vehicle Type: Bike | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << printParkingTime(bikeData.bikeEntry[i], baseTime) << endl;
+            parkingfile << "Bike" << plate << " " << bikeTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -138,8 +140,9 @@ void parkVan(Van &vanData) {
             vanData.plates[i] = plate;
             vanData.vanEntry[i] = steady_clock::now();
             vanTime = printParkingTime(vanData.vanEntry[i], baseTime);
-            cout << "Van Plate: " << plate << " parked at Slot " << i + 1 << " at time: " << printParkingTime(vanData.vanEntry[i], baseTime) << endl;
-            parkingfile << "PARKED | Vehicle Type: Van | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << vanTime << endl;
+            cout << "PARKED | Vehicle Type: Van | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << printParkingTime(vanData.vanEntry[i], baseTime) << endl;
+            parkingfile << "Van" << plate << " " << vanTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -164,8 +167,9 @@ void parkTruck(Truck &truckData) {
             truckData.plates[i] = plate;
             truckData.truckEntry[i] = steady_clock::now();
             truckTime = printParkingTime(truckData.truckEntry[i], baseTime);
-            cout << "Truck Plate: " << plate << " parked at Slot " << i + 1 << " at time: " << printParkingTime(truckData.truckEntry[i], baseTime) << endl;
-            parkingfile << "PARKED | Vehicle Type: Truck | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << truckTime << endl;
+            cout << "PARKED | Vehicle Type: Truck | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << printParkingTime(truckData.truckEntry[i], baseTime) << endl;
+            parkingfile << "Car" << plate << " " << truckTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -180,8 +184,8 @@ void removeCar(Car &carData){
     cout << "Enter the car plate number you want to remove: ";
     cin >> plate;
     bool found = false;
-    ofstream parkingfile("parkinglog.txt", ios::app);
-    if(!parkingfile.is_open()){
+    ofstream exitfile("exitlog.txt", ios::app);
+    if(!exitfile.is_open()){
         cout << "Unable to open File" << endl;
         return;
     }
@@ -191,10 +195,16 @@ void removeCar(Car &carData){
             carExit = printParkingTime(steady_clock::now(), baseTime);
             carData.plates[i] = ""; 
             carData.carEntry[i] = steady_clock::time_point();
-            cout << "Your Car with plate number " << plate << " removed from Slot " << i + 1 << "at " << carExit << endl;
-            cout << "Fee is: $" << carData.carFee << endl;
+            cout << "---------------------------" << endl;
+            cout << "       Parking Receipt" << endl;
+            cout << "Vehicle Type: Car" << endl;
+            cout << "Plate: " << plate << endl;
+            cout << "Fee: $" << carData.carFee << endl;
+            cout << "    Thank You For Parking" << endl;
+            cout << "---------------------------" << endl;
+            cout << endl;
             carData.carTotal += carData.carFee;
-            parkingfile << "EXIT | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Exit Time: " << carExit << endl;
+            exitfile << "Car" << " "<< plate << " " << carExit << endl;
             break;
         }
     }
@@ -446,12 +456,14 @@ int main(){
                 }
                 else {
                     cout << "Invalid vehicle type! Please enter car, bike, truck, or van." << endl;
+                    break;
                 }
             case 2:
                 cout << "Enter vehicle type (car/bike/truck/van): ";
                     cin >> vehicletype;
                 if (vehicletype == "car" || vehicletype == "Car") {
                     removeCar(carData);
+                    break;
                 }
                 else if (vehicletype == "bike" || vehicletype == "Bike") {
                     removeBike(bikeData);
