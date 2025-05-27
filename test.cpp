@@ -294,7 +294,7 @@ void removeCar(Car &carData, system_clock::time_point baseTime){
         if (carData.plates[i] == plate) {
             found = true;
             carExit = printParkingTime(system_clock::now(), baseTime);
-            parkingfile << "EXIT" << " " << "Car" << plate << " " << carExit << endl;
+            parkingfile << "EXIT" << " " << "Car" << " " <<  plate << " " << carExit << endl;
             carData.plates[i] = ""; 
             carData.carEntry[i] = system_clock::time_point();
             cout << "---------------------------" << endl;
@@ -330,7 +330,7 @@ void removeBike(Bike &bikeData, system_clock::time_point baseTime){
         if (bikeData.plates[i] == plate) {
             found = true;
             bikeExit = printParkingTime(system_clock::now(), baseTime);
-            parkingfile << "EXIT" << " " << "Bike" << plate << " " << bikeExit << endl;
+            parkingfile << "EXIT" << " " << "Bike" << " " << plate << " " << bikeExit << endl;
             bikeData.plates[i] = ""; 
             bikeData.bikeEntry[i] = system_clock::time_point();
             cout << "---------------------------" << endl;
@@ -366,7 +366,7 @@ void removeVan(Van &vanData, system_clock::time_point baseTime){
         if (vanData.plates[i] == plate) {
             found = true;
             vanExit = printParkingTime(system_clock::now(), baseTime);
-            parkingfile << "EXIT" << " " << "Van" << plate << " " << vanExit << endl;
+            parkingfile << "EXIT" << " " << "Van" << " " << plate << " " << vanExit << endl;
             vanData.plates[i] = ""; 
             vanData.vanEntry[i] = system_clock::time_point();
             cout << "---------------------------" << endl;
@@ -402,7 +402,7 @@ void removeTruck(Truck &truckData, system_clock::time_point baseTime){
         if (truckData.plates[i] == plate) {
             found = true;
             truckExit = printParkingTime(system_clock::now(), baseTime);
-            parkingfile << "EXIT" << " " << "Truck" << plate << " " << truckExit << endl;
+            parkingfile << "EXIT" << " " << "Truck" << " " << plate << " " << truckExit << endl;
             truckData.plates[i] = ""; 
             truckData.truckEntry[i] = system_clock::time_point();
             cout << "---------------------------" << endl;
