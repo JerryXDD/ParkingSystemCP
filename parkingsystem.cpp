@@ -217,6 +217,7 @@ void parkCar(Car &carData, system_clock::time_point baseTime) {
             carTime = printParkingTime(carData.carEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << carTime << endl;
             parkingfile << "PARKED" << " " << "Car" << " " << plate << " " << carTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -251,6 +252,7 @@ void parkBike(Bike &bikeData, system_clock::time_point baseTime) {
             bikeTime = printParkingTime(bikeData.bikeEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Bike | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << bikeTime << endl;
             parkingfile << "PARKED" << " " << "Bike" << " " << plate << " " << bikeTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -285,6 +287,7 @@ void parkVan(Van &vanData, system_clock::time_point baseTime) {
             vanTime = printParkingTime(vanData.vanEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Van | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << vanTime << endl;
             parkingfile << "PARKED" << " " << "Van" << " " << plate << " " << vanTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -319,6 +322,7 @@ void parkTruck(Truck &truckData, system_clock::time_point baseTime) {
             truckTime = printParkingTime(truckData.truckEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Truck | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << truckTime << endl;
             parkingfile << "PARKED" << " " << "Truck" << " " << plate << " " << truckTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -379,6 +383,7 @@ void removeCar(Car &carData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Car" << " " <<  plate << " " << carExit << endl;
             carData.plates[i] = ""; 
             carData.carEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
@@ -421,6 +426,7 @@ void removeBike(Bike &bikeData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Bike" << " " << plate << " " << bikeExit << endl;
             bikeData.plates[i] = ""; 
             bikeData.bikeEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
@@ -463,6 +469,7 @@ void removeVan(Van &vanData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Van" << " " << plate << " " << vanExit << endl;
             vanData.plates[i] = ""; 
             vanData.vanEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
@@ -505,10 +512,11 @@ void removeTruck(Truck &truckData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Truck" << " " << plate << " " << truckExit << endl;
             truckData.plates[i] = ""; 
             truckData.truckEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
-            cout << "Vehicle Type: Truc" << endl;
+            cout << "Vehicle Type: Truck" << endl;
             cout << "Plate: " << plate << endl;
             cout << "Fee: $" << truckData.truckFee << endl;
             cout << "    Thank You For Parking" << endl;
