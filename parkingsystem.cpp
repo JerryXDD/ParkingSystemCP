@@ -665,6 +665,7 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
                     cout << "FOUND" << endl;
                     cout << "Vehicle Type: Bike | Plate number " << platenumber << " | Slot: " << j + 1 << endl;
                     cout << endl;
+                    found = true;
                     break;
                 }
             }
@@ -675,6 +676,7 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
                     cout << "FOUND" << endl;
                     cout << "Vehicle Type: Truck | Plate number " << platenumber << " | Slot: " << x + 1 << endl;
                     cout << endl;
+                    found = true;
                     break;
                 }
             }
@@ -685,6 +687,7 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
                     cout << "FOUND" << endl;
                     cout << "Vehicle Type: Van | Plate number " << platenumber << " | Slot: " << y + 1 << endl;
                     cout << endl;
+                    found = true;
                     break;
                 }
             }
