@@ -206,6 +206,7 @@ void parkCar(Car &carData, system_clock::time_point baseTime) {
     for (int x = 0; x < carData.slots; x++){
         if (plate == carData.plates[x]){
             cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
             parkingfile.close();
             return;
         }
@@ -241,6 +242,7 @@ void parkBike(Bike &bikeData, system_clock::time_point baseTime) {
     for (int x = 0; x < bikeData.slots; x++){
         if (plate == bikeData.plates[x]){
             cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
             parkingfile.close();
             return;
         }
@@ -276,6 +278,7 @@ void parkVan(Van &vanData, system_clock::time_point baseTime) {
     for (int x = 0; x < vanData.slots; x++){
         if (plate == vanData.plates[x]){
             cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
             parkingfile.close();
             return;
         }
@@ -311,6 +314,7 @@ void parkTruck(Truck &truckData, system_clock::time_point baseTime) {
     for (int x = 0; x < truckData.slots; x++){
         if (plate == truckData.plates[x]){
             cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
             parkingfile.close();
             return;
         }
@@ -372,6 +376,7 @@ void removeCar(Car &carData, system_clock::time_point baseTime){
     
     if (checkRemoved(plate)){
         cout << "Error. Car Already Removed" << endl;
+        cout << endl;
         parkingfile.close();
         return;
     }
@@ -416,6 +421,7 @@ void removeBike(Bike &bikeData, system_clock::time_point baseTime){
     
     if (checkRemoved(plate)){
         cout << "Error. Bike Already Removed" << endl;
+        cout << endl;
         parkingfile.close();
         return;
     }
@@ -459,6 +465,7 @@ void removeVan(Van &vanData, system_clock::time_point baseTime){
     
     if (checkRemoved(plate)){
         cout << "Error. Van Already Removed" << endl;
+        cout << endl;
         parkingfile.close();
         return;
     }
@@ -502,6 +509,7 @@ void removeTruck(Truck &truckData, system_clock::time_point baseTime){
     
     if (checkRemoved(plate)){
         cout << "Error. Truck Already Removed" << endl;
+        cout << endl;
         parkingfile.close();
         return;
     }
@@ -664,6 +672,7 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
         if (!found){
             for (int x = 0; x < truckData.slots; x++){
                 if (truckData.plates[x] == platenumber){
+                    cout << "FOUND" << endl;
                     cout << "Vehicle Type: Truck | Plate number " << platenumber << " | Slot: " << x + 1 << endl;
                     cout << endl;
                     break;
@@ -673,6 +682,7 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
         if (!found){
             for (int y = 0; y < vanData.slots; y++){
                 if (vanData.plates[y] == platenumber){
+                    cout << "FOUND" << endl;
                     cout << "Vehicle Type: Van | Plate number " << platenumber << " | Slot: " << y + 1 << endl;
                     cout << endl;
                     break;
@@ -704,7 +714,8 @@ int main(){
         cin >> choice;
         if (choice < 1 || choice > 6) {
             cout << "Invalid option! Please enter a choice between 1 and 6." << endl;
-            break;
+            cout << endl;
+            continue;
         }
         switch(choice){
             case 1:
@@ -753,9 +764,13 @@ int main(){
                 break;
             case 4:
                 if (dataLoaded){
+                    cout << endl;
                     cout << "Vehicle Data Loaded Successfully" << endl;
+                    cout << endl;
                 } else {
+                    cout << endl;
                     cout << "No Previous Data" << endl;
+                    cout << endl;
                 }
                 adminPanel(carData, bikeData, vanData, truckData);
                 cout << endl;
