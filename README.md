@@ -1,6 +1,6 @@
 # Smart Parking Lot System
 
-As Part of my 1st Semester Project for the Computer Programming Course, we deisgned a comprehensive C++ console-based parking management system that handles multiple vehicle types with persistent data storage and time simulation features.
+As Part of my 1st Semester Project for the Computer Programming Course, we designed a comprehensive C++ console-based parking management system that handles multiple vehicle types with persistent data storage and time simulation features.
 
 ## Features
 
