@@ -4,10 +4,10 @@
 #include <fstream>
 #include <sstream>
 #include <cstdio>
+#include <stdlib.h>
 using namespace std;
 using namespace std::chrono;
 
-//this function will load the last time from last_exit_time.txt, and resume the program from the time where we exitted
 system_clock::time_point loadBaseTime() {
     ifstream file("last_exit_time.txt");
     time_t savedTime;
@@ -17,14 +17,13 @@ system_clock::time_point loadBaseTime() {
         return system_clock::now();
     }
 }
-// program exit par, this function will save the time in last_exit_time.txt, so it can be read again to resume from the previous time, instead of being resetted
+
 void saveBaseTime(system_clock::time_point timeToSave) {
     ofstream file("last_exit_time.txt");
     time_t t = system_clock::to_time_t(timeToSave);
     file << t;
 }
 
-//speed up our time i.e 10 seconds real life to 1 minute in code time;
 int simulateTime(system_clock::time_point entryTime, system_clock::time_point baseTime) {
     auto now = system_clock::now();
     auto realSeconds = duration_cast<seconds>(now - baseTime).count();
@@ -32,7 +31,6 @@ int simulateTime(system_clock::time_point entryTime, system_clock::time_point ba
     return codeMinutes;
 }
 
-//prints the time jab bhi vehicle parks or exits. Park krne par this will get stored in the array
 string printParkingTime(system_clock::time_point entryTime, system_clock::time_point baseTime) {
     string parkTime;
     int codeMinutes = simulateTime(entryTime, baseTime);
@@ -104,8 +102,6 @@ void vehicleMenu(){
     cout << endl;
 }
 
-// ye wala function will load our previous data back into the program so we stay within our alloted slot limits because arrays reset upon exit.
-// incase koi data nahi milega, it wont load anything
 bool loadVehicle(Car &carData, Bike &bikeData, Truck &truckData, Van &vanData) {
 	string type, plate, line, time, status;
     int carCount = 0, bikeCount = 0, truckCount = 0, vanCount = 0;
@@ -115,34 +111,58 @@ bool loadVehicle(Car &carData, Bike &bikeData, Truck &truckData, Van &vanData) {
     if (!parkinglog.is_open()){
         return false;
     }
-    // Get the current system time here
     system_clock::time_point now = system_clock::now();
 
     while (getline(parkinglog, line)) {
         stringstream ss(line);
         ss >> status >> type >> plate >> time;
 
-        if (sscanf(time.c_str(), "%d:%d", &logHour, &logMinute) != 2) { // This line will parse our Time string wali value, into hour and minute integers. First %d is for logHour and Second %d is for logMinute
-            cout << "Invalid time format in log: " << time << endl;    // If the Format is not valid which is, the time string doesnt have a : in between, it will skip the current entry.
+        if (sscanf(time.c_str(), "%d:%d", &logHour, &logMinute) != 2) { 
+            cout << "Invalid time format in log: " << time << endl; 
             continue;
         }
 
-        // Calculate entryMinutes since base time 10:00
         int entryMinutes = (logHour - 10) * 60 + logMinute;
 
-        // yahan par entry minutes ko hamaray scale se convert kareinge
-        // 1 simulated minute = 10 real seconds
         auto entryTime = now - minutes(entryMinutes * 10);
-        // Relevant Totals & Data will be added back to the arrays
+
         if(status == "EXIT"){
             if (type == "Car") {
                 carData.carTotal += carData.carFee; 
+                for(int i = 0; i < carData.slots; i++){
+                    if(carData.plates[i] == plate){
+                        carData.plates[i] = "";
+                        carData.carEntry[i] = system_clock::time_point();
+                        break;
+                    }
+                }
             } else if (type == "Bike") {
                 bikeData.bikeTotal += bikeData.bikeFee;
+                for(int i = 0; i < bikeData.slots; i++){
+                    if(bikeData.plates[i] == plate){
+                        bikeData.plates[i] = "";
+                        bikeData.bikeEntry[i] = system_clock::time_point();
+                        break;
+                    }
+                }
             } else if (type == "Truck"){
                 truckData.truckTotal += truckData.truckFee;
+                for(int i = 0; i < truckData.slots; i++){
+                    if(truckData.plates[i] == plate){
+                        truckData.plates[i] = "";
+                        truckData.truckEntry[i] = system_clock::time_point();
+                        break;
+                    }
+                }
             } else if (type == "Van"){
                 vanData.vanTotal += vanData.vanFee;
+                for(int i = 0; i < vanData.slots; i++){
+                    if(vanData.plates[i] == plate){
+                        vanData.plates[i] = "";
+                        vanData.vanEntry[i] = system_clock::time_point();
+                        break;
+                    }
+                }
             }
             loaded = true;
         } else if (status == "PARKED"){
@@ -181,18 +201,27 @@ void parkCar(Car &carData, system_clock::time_point baseTime) {
         cout << "Unable to open File" << endl;
         return;
     }
-        for (int i = 0; i < carData.slots; i++) {
-            if (carData.plates[i] == "") {
-                cout << "Enter plate number for Car: ";
-                cin >> plate;
-                carData.plates[i] = plate;
-                carData.carEntry[i] = system_clock::now();
-                carTime = printParkingTime(carData.carEntry[i], baseTime);
-                cout << "PARKED | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << carTime << endl;
-                parkingfile << "PARKED" << " " << "Car" << " " << plate << " " << carTime << endl;
-                parked = true;
-                break;
-            }
+    cout << "Enter Plate Number for Car: ";
+    cin >> plate;
+    for (int x = 0; x < carData.slots; x++){
+        if (plate == carData.plates[x]){
+            cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
+            parkingfile.close();
+            return;
+        }
+    }
+    for (int i = 0; i < carData.slots; i++) {
+        if (carData.plates[i] == "") {
+            carData.plates[i] = plate;
+            carData.carEntry[i] = system_clock::now();
+            carTime = printParkingTime(carData.carEntry[i], baseTime);
+            cout << "PARKED | Vehicle Type: Car | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << carTime << endl;
+            parkingfile << "PARKED" << " " << "Car" << " " << plate << " " << carTime << endl;
+            cout << endl;
+            parked = true;
+            break;
+        }
     }
     if (!parked){
             cout << "No car slots available." << endl;
@@ -208,15 +237,24 @@ void parkBike(Bike &bikeData, system_clock::time_point baseTime) {
         cout << "Unable to open File" << endl;
         return;
     }
+    cout << "Enter Plate Number for Bike: ";
+    cin >> plate;
+    for (int x = 0; x < bikeData.slots; x++){
+        if (plate == bikeData.plates[x]){
+            cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
+            parkingfile.close();
+            return;
+        }
+    }
     for (int i = 0; i < bikeData.slots; i++) {
         if (bikeData.plates[i] == "") {
-            cout << "Enter plate number for Bike: ";
-            cin >> plate;
             bikeData.plates[i] = plate;
             bikeData.bikeEntry[i] = system_clock::now();
             bikeTime = printParkingTime(bikeData.bikeEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Bike | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << bikeTime << endl;
             parkingfile << "PARKED" << " " << "Bike" << " " << plate << " " << bikeTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -235,15 +273,24 @@ void parkVan(Van &vanData, system_clock::time_point baseTime) {
         cout << "Unable to open File" << endl;
         return;
     }
+    cout << "Enter Plate Number for Van: ";
+    cin >> plate;
+    for (int x = 0; x < vanData.slots; x++){
+        if (plate == vanData.plates[x]){
+            cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
+            parkingfile.close();
+            return;
+        }
+    }
     for (int i = 0; i < vanData.slots; i++) {
         if (vanData.plates[i] == "") {
-            cout << "Enter plate number for Van: ";
-            cin >> plate;
             vanData.plates[i] = plate;
             vanData.vanEntry[i] = system_clock::now();
             vanTime = printParkingTime(vanData.vanEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Van | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << vanTime << endl;
             parkingfile << "PARKED" << " " << "Van" << " " << plate << " " << vanTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -262,15 +309,24 @@ void parkTruck(Truck &truckData, system_clock::time_point baseTime) {
         cout << "Unable to open File" << endl;
         return;
     }
+    cout << "Enter Plate Number for Truck: ";
+    cin >> plate;
+    for (int x = 0; x < truckData.slots; x++){
+        if (plate == truckData.plates[x]){
+            cout << "Duplicate Plate Number Found" << endl;
+            cout << endl;
+            parkingfile.close();
+            return;
+        }
+    }
     for (int i = 0; i < truckData.slots; i++) {
         if (truckData.plates[i] == "") {
-            cout << "Enter plate number for Truck: ";
-            cin >> plate;
             truckData.plates[i] = plate;
             truckData.truckEntry[i] = system_clock::now();
             truckTime = printParkingTime(truckData.truckEntry[i], baseTime);
             cout << "PARKED | Vehicle Type: Truck | Plate: " << plate << " | Slot: " << i + 1 << " | Time: " << truckTime << endl;
             parkingfile << "PARKED" << " " << "Truck" << " " << plate << " " << truckTime << endl;
+            cout << endl;
             parked = true;
             break;
         }
@@ -280,16 +336,51 @@ void parkTruck(Truck &truckData, system_clock::time_point baseTime) {
     }
 }
 
+bool checkRemoved(string plate){
+    string type, line, time, status, platex;
+    bool parked = false;
+    bool removed = false;
+    ifstream parkingfile("parkinglog.txt");
+    if (!parkingfile.is_open()){
+        cout << "Error Opening File" << endl;
+        return false;
+    }
+    while (getline(parkingfile, line)) {
+        stringstream ss(line);
+        ss >> status >> type >> platex >> time;
+        
+        if (platex == plate){
+            if (status == "PARKED"){
+                parked = true;
+                removed = false;
+            } else if (status == "EXIT"){
+                removed = true;
+            }
+        }
+    }
+    parkingfile.close();
+    return removed;
+}
+
+
 void removeCar(Car &carData, system_clock::time_point baseTime){
     string plate, carExit;
-    cout << "Enter the car plate number you want to remove: ";
-    cin >> plate;
     bool found = false;
     ofstream parkingfile("parkinglog.txt", ios::app);
     if(!parkingfile.is_open()){
         cout << "Unable to open File" << endl;
         return;
     }
+    cout << "Enter the car plate number you want to remove: ";
+    cin >> plate;
+    
+    if (checkRemoved(plate)){
+        cout << "Error. Car Already Removed" << endl;
+        cout << endl;
+        parkingfile.close();
+        return;
+    }
+
     for (int i = 0; i < carData.slots; i++) {
         if (carData.plates[i] == plate) {
             found = true;
@@ -297,6 +388,7 @@ void removeCar(Car &carData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Car" << " " <<  plate << " " << carExit << endl;
             carData.plates[i] = ""; 
             carData.carEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
@@ -318,12 +410,19 @@ void removeCar(Car &carData, system_clock::time_point baseTime){
 
 void removeBike(Bike &bikeData, system_clock::time_point baseTime){
     string plate, bikeExit;
-    cout << "Enter the car plate number you want to remove: ";
-    cin >> plate;
     bool found = false;
     ofstream parkingfile("parkinglog.txt", ios::app);
     if(!parkingfile.is_open()){
         cout << "Unable to open File" << endl;
+        return;
+    }
+    cout << "Enter Bike Plate Number To remove: ";
+    cin >> plate;
+    
+    if (checkRemoved(plate)){
+        cout << "Error. Bike Already Removed" << endl;
+        cout << endl;
+        parkingfile.close();
         return;
     }
     for (int i = 0; i < bikeData.slots; i++) {
@@ -333,6 +432,7 @@ void removeBike(Bike &bikeData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Bike" << " " << plate << " " << bikeExit << endl;
             bikeData.plates[i] = ""; 
             bikeData.bikeEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
@@ -354,12 +454,19 @@ void removeBike(Bike &bikeData, system_clock::time_point baseTime){
 
 void removeVan(Van &vanData, system_clock::time_point baseTime){
     string plate, vanExit;
-    cout << "Enter the car plate number you want to remove: ";
-    cin >> plate;
     bool found = false;
     ofstream parkingfile("parkinglog.txt", ios::app);
     if(!parkingfile.is_open()){
         cout << "Unable to open File" << endl;
+        return;
+    }
+    cout << "Enter Van Plate Number To remove: ";
+    cin >> plate;
+    
+    if (checkRemoved(plate)){
+        cout << "Error. Van Already Removed" << endl;
+        cout << endl;
+        parkingfile.close();
         return;
     }
     for (int i = 0; i < vanData.slots; i++) {
@@ -369,6 +476,7 @@ void removeVan(Van &vanData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Van" << " " << plate << " " << vanExit << endl;
             vanData.plates[i] = ""; 
             vanData.vanEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
@@ -390,12 +498,19 @@ void removeVan(Van &vanData, system_clock::time_point baseTime){
 
 void removeTruck(Truck &truckData, system_clock::time_point baseTime){
     string plate, truckExit;
-    cout << "Enter the car plate number you want to remove: ";
-    cin >> plate;
     bool found = false;
     ofstream parkingfile("parkinglog.txt", ios::app);
     if(!parkingfile.is_open()){
         cout << "Unable to open File" << endl;
+        return;
+    }
+    cout << "Enter Truck Plate Number To remove: ";
+    cin >> plate;
+    
+    if (checkRemoved(plate)){
+        cout << "Error. Truck Already Removed" << endl;
+        cout << endl;
+        parkingfile.close();
         return;
     }
     for (int i = 0; i < truckData.slots; i++) {
@@ -405,10 +520,11 @@ void removeTruck(Truck &truckData, system_clock::time_point baseTime){
             parkingfile << "EXIT" << " " << "Truck" << " " << plate << " " << truckExit << endl;
             truckData.plates[i] = ""; 
             truckData.truckEntry[i] = system_clock::time_point();
+            cout << endl;
             cout << "---------------------------" << endl;
             cout << "       Parking Receipt" << endl;
             cout << endl;
-            cout << "Vehicle Type: Truc" << endl;
+            cout << "Vehicle Type: Truck" << endl;
             cout << "Plate: " << plate << endl;
             cout << "Fee: $" << truckData.truckFee << endl;
             cout << "    Thank You For Parking" << endl;
@@ -469,7 +585,6 @@ void printlog(){
     }
 }
 
-// username and password will get validated through another file, just simple reading and comparison as miss fatima suggested this when i asked her
 void adminPanel(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData){
     string storeduser, storedpw;
 	string userinput, pwinput;
@@ -482,9 +597,10 @@ void adminPanel(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData){
     getline(parkLog, storeduser);
 	getline(parkLog, storedpw);
 	parkLog.close();
+    cin.ignore();
+
     while(tries < 3){
         cout << "Enter Username: ";
-        cin.ignore();
 		getline(cin, userinput);
 		cout << "Enter Password: ";
 		getline(cin, pwinput);
@@ -549,6 +665,7 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
                     cout << "FOUND" << endl;
                     cout << "Vehicle Type: Bike | Plate number " << platenumber << " | Slot: " << j + 1 << endl;
                     cout << endl;
+                    found = true;
                     break;
                 }
             }
@@ -556,8 +673,10 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
         if (!found){
             for (int x = 0; x < truckData.slots; x++){
                 if (truckData.plates[x] == platenumber){
+                    cout << "FOUND" << endl;
                     cout << "Vehicle Type: Truck | Plate number " << platenumber << " | Slot: " << x + 1 << endl;
                     cout << endl;
+                    found = true;
                     break;
                 }
             }
@@ -565,8 +684,10 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
         if (!found){
             for (int y = 0; y < vanData.slots; y++){
                 if (vanData.plates[y] == platenumber){
+                    cout << "FOUND" << endl;
                     cout << "Vehicle Type: Van | Plate number " << platenumber << " | Slot: " << y + 1 << endl;
                     cout << endl;
+                    found = true;
                     break;
                 }
             }
@@ -576,92 +697,3 @@ void searchVehicle(Car &carData, Bike &bikeData, Van &vanData, Truck &truckData)
             cout << endl;
         }
 }
-
-int main(){
-    Car carData;
-    Bike bikeData;
-    Van vanData;
-    Truck truckData;
-    int choice, parkchoice, removechoice;
-    bool found = false;
-    string vehicletype;
-    // Check if Any Previous Time is saved and start from there, otherwise it will start from 10:00
-    system_clock::time_point baseTime = loadBaseTime();
-    // Previous Data to be loaded
-    bool dataLoaded = loadVehicle(carData, bikeData, truckData, vanData);
-    do {
-        printmenu();
-        cout << "Enter choice: ";
-        cin >> choice;
-        if (choice < 1 || choice > 6) {
-            cout << "Invalid option! Please enter a choice between 1 and 6." << endl;
-            break;
-        }
-        switch(choice){
-            case 1:
-                vehicleMenu();
-                cout << "Enter Option: ";
-                cin >> parkchoice;
-                cout << endl;
-                switch(parkchoice){
-                    case 1:
-                        parkCar(carData, baseTime);
-                        break;
-                    case 2:
-                        parkBike(bikeData, baseTime);
-                        break;
-                    case 3:
-                        parkVan(vanData, baseTime);
-                        break;
-                    case 4:
-                        parkTruck(truckData, baseTime);
-                        break;
-                }
-                break;
-            case 2:
-                vehicleMenu();
-                cout << "Enter Option For Exit: ";
-                cin >> removechoice;
-                cout << endl;
-                switch(removechoice){
-                    case 1:
-                        removeCar(carData, baseTime);
-                        break;
-                    case 2:
-                        removeBike(bikeData, baseTime);
-                        break;
-                    case 3:
-                        removeVan(vanData, baseTime);
-                        break;
-                    case 4:
-                        removeTruck(truckData, baseTime);
-                        break;
-                }
-                break;
-            case 3:
-                countSlots(carData, bikeData, vanData, truckData);
-                cout << endl;
-                break;
-            case 4:
-                if (dataLoaded){
-                    cout << "Vehicle Data Loaded Successfully" << endl;
-                } else {
-                    cout << "No Previous Data" << endl;
-                }
-                adminPanel(carData, bikeData, vanData, truckData);
-                cout << endl;
-                break;
-            case 5:
-                searchVehicle(carData, bikeData, vanData, truckData);
-                break;
-            case 6:
-                // As Soon as User Exits, code ka current time gets saved in last_exit_time.txt
-                // Beware that time can get a little buggy at certain periods, not our fault as compiler mein inconsistencies hongi in interpreting time
-                cout << "Exiting System......" << endl;
-                string exitTime = printParkingTime(system_clock::now(), baseTime);
-                saveBaseTime(baseTime);
-                return 0;
-        }
-    } while (choice > 0);
-    system("pause");
-}   
